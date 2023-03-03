@@ -1,29 +1,39 @@
 #include"head.h"
 
-Mat getTruncatedPhase(Mat& image) {
-	image = imread("D:\\image/book/DIP3E_Original_Images_CH06/Fig0638(a)(lenna_RGB).tif");
 
-	std::vector<cv::Mat> channels;
-	cv::split(image, channels);
+Mat getTruncatedPhase() {
+	//! 由于返回三张图片 故借用了三通道图片 方便传值
+	Mat image = generatePattern(3);
+	std::vector<cv::Mat> I;
+	cv::split(image, I);
+	cv::imshow("TruncatedPhase", I[0]);
+	cv::imshow("TruncatedPhase", I[1]);
+	cv::imshow("TruncatedPhase", I[2]);
 
-	cv::imshow("BGR", image);
-	cv::imshow("B", channels[0]);
-	cv::imshow("G", channels[1]);
-	cv::imshow("R", channels[2]);
 
-	Mat blurImageB, blurImageG, blurImageR;
-	cv::blur(channels[0], blurImageB, Size(5, 5));
-	cv::blur(channels[1], blurImageG, Size(5, 5));
-	cv::blur(channels[2], blurImageR, Size(5, 5));
+	Mat I_phase = Mat::zeros(1140, 912, CV_32FC1);
+	Mat I_phase_255 = Mat::zeros(1140, 912, 0);
+	cv::imshow("TruncatedPhase-I[0]", I[0]);
 
-	cv::imshow("blurImageB", blurImageB);
-	cv::imshow("blurImageG", blurImageG);
-	cv::imshow("blurImageR", blurImageR);
+	//! 阈值设置为255的一半
+	double I_A = 127;
 
-	cv::Mat mergeChannels[3] = { blurImageB, blurImageG, blurImageR };
-	cv::merge(mergeChannels, 3, image);
-	cv::imshow("MergeRGB", image);
+	for (int i = 0; i < I_phase.rows; i++) {
+		for (int j = 0; j < I_phase.cols; j++) {
+			double phase = atan((sqrt(3) * (I[0].at<uchar>(i, j) - I[2].at<uchar>(i, j))) / (2 * I[1].at<uchar>(i, j) - I[0].at<uchar>(i, j) - I[2].at<uchar>(i, j)));
+			I_phase.at<float>(i, j) = phase;
+			I_phase_255.at<uchar>(i, j) = (phase + CV_PI / 2) / CV_PI * 255;
+		}
+	}
+
+
+	cv::imshow("TruncatedPhase_float", I_phase);
+	cv::imshow("TruncatedPhase_255", I_phase_255);
 
 	cv::waitKey(0);
-	return image;
+
+
+
+
+	return I_phase;
 }

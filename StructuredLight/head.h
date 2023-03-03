@@ -12,10 +12,11 @@ using namespace std;
 using namespace cv;
 
 // !生成投影光栅条纹
-Mat generatePattern(Mat& image);
-
+//void generatePattern();
+//Mat* generatePattern(int n);
+Mat generatePattern(int n);
 // !CCD得到截断相位
-Mat getTruncatedPhase(Mat& image);
+Mat getTruncatedPhase();
 
 // !解包裹 得到连续相位
 Mat getContinuousPhase(Mat& image);
