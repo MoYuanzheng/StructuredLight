@@ -28,7 +28,6 @@ Mat getTruncatedPhase() {
 
 	//cv::imshow("TruncatedPhase_float", I_phase);
 	//cv::imshow("TruncatedPhase_255", I_phase_255);
-
 	//cv::waitKey(0);
 
 	return I_phase_255;

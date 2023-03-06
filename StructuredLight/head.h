@@ -18,6 +18,7 @@ const int phaseShiftSteps = 3;
 //! 格雷码位数
 const int GrayBits = 4;
 
+// !===投射阶段===
 // !生成投影光栅条纹
 std::vector<cv::Mat> generatePattern();
 
@@ -28,14 +29,22 @@ std::vector<std::string> GrayCodeProjectCode(int n);
 // !投影格雷码图片
 std::vector<cv::Mat> GrayCodeProjectImage(std::vector<string> grayCode);
 
-// !CCD得到截断相位
+// !===捕捉计算阶段===
+// !CCD捕捉图像光栅图像并进行二值化处理
+// --------------------------
+// !计算截断相位
 cv::Mat getTruncatedPhase();
 
+// !解格雷码
+// -------------------
+// !计算各像素相位级次
+// -------------------
 // !解包裹 得到连续相位
-Mat getContinuousPhase(Mat& image);
-
+Mat getContinuousPhase(Mat image);
+//-----------------------------------
 // !高度映射
-Mat getHighlyMapped(Mat& image);
+Mat getHighlyMapped(Mat image);
+//-----------------------------------
 
-
-
+// !相机标定
+//-----------------------------------

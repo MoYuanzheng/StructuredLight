@@ -1,6 +1,5 @@
 #include"head.h"
 
-Mat getContinuousPhase() {
-	Mat image;
+Mat getContinuousPhase(Mat image) {
 	return image;
 }

@@ -1,15 +1,6 @@
 #include "head.h"
 
 int main() {
-
-	//image = generatePattern(3);
-	//Array_I = generatePattern(3);
-	//cv::imshow("TruncatedPhase", Array_I[0]);
-	//cv::imshow("TruncatedPhase1", Array_I[1]);
-	//cv::imshow("TruncatedPhase2", Array_I[2]);
-	//cv::waitKey(0);
-
-
 	std::vector<cv::Mat> GrayImage;
 	std::vector<cv::Mat> PatternImage;
 	Mat TruncatedPhaseImage;
@@ -18,13 +9,20 @@ int main() {
 
 	//! ¸ñÀ×Í¼
 	GrayImage = GrayCodeProjectImage(gray_code);
+	for (int i = 0; i < GrayImage.size(); i++) {
+		cv::imshow("GrayImage_" + char(i), GrayImage[i]);
+	}
 
 	//! ¹âÕ¤Í¼
 	PatternImage = generatePattern();
+	for (int i = 0; i < PatternImage.size(); i++) {
+		cv::imshow("PatternImage_" + char(i), PatternImage[i]);
+	}
 
 	//! ½Ø¶ÏÏàÎ»Í¼
 	TruncatedPhaseImage = getTruncatedPhase();
-
+	cv::imshow("TruncatedPhaseImage", TruncatedPhaseImage);
+	cv::waitKey(0);
 
 	return 0;
 }
