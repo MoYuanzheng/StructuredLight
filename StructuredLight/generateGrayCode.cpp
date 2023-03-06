@@ -1,19 +1,19 @@
 #include "head.h"
 
-vector<string> GrayCode(int n) {
+std::vector<std::string> GrayCode(int n) {
 	if (n < 1) {
 		cout << "格雷码数量必须大于0" << endl;
 		assert(0);
 	}
 	else if (n == 1) {
-		vector<string> code;
+		std::vector<std::string> code;
 		code.emplace_back("0");
 		code.emplace_back("1");
 		return code;
 	}
 	else {
-		vector<string> code;
-		vector<string> code_pre = GrayCode(n - 1);
+		std::vector<std::string> code;
+		std::vector<std::string> code_pre = GrayCode(n - 1);
 
 		for (int idx = 0; idx < code_pre.size(); ++idx) {
 			code.push_back("0" + code_pre[idx]);
@@ -25,9 +25,9 @@ vector<string> GrayCode(int n) {
 	}
 }
 
-vector<string> GrayCodeProjectCode(int n) {
+std::vector<std::string> GrayCodeProjectCode(int n) {
 
-	vector<string> grayCode = { "01" };
+	std::vector<std::string> grayCode = { "01" };
 
 	if (n < 1) {
 		cout << "图像数量必须大于0" << endl;
@@ -36,7 +36,7 @@ vector<string> GrayCodeProjectCode(int n) {
 	else {
 		for (int j = 2; j <= n; j++) {
 			int number = pow(2, j) / 2;
-			string units = {};
+			std::string units = {};
 			for (int i = 0; i < number; i++) {
 				if (i % 2 == 0) { units += "01"; }
 				else { units += "10"; }
@@ -47,9 +47,9 @@ vector<string> GrayCodeProjectCode(int n) {
 	return grayCode;
 }
 
-std::vector<cv::Mat> GrayCodeProjectImage(vector<string> grayCode) {
-	std::vector<Mat> grayImages;
-	Mat grayImage = Mat::zeros(1140, 912, 0);
+std::vector<cv::Mat> GrayCodeProjectImage(std::vector<std::string> grayCode) {
+	std::vector<cv::Mat> grayImages;
+	cv::Mat grayImage = cv::Mat::zeros(progectRows, projectCols, 0);
 	for (int k = 0; k < grayCode.size(); k++) {
 		int level = grayImage.cols / grayCode[k].length();
 
