@@ -1,8 +1,7 @@
 #include "head.h"
 
 int main() {
-	//std::vector<cv::Mat> image;
-	Mat image;
+
 	//image = generatePattern(3);
 	//Array_I = generatePattern(3);
 	//cv::imshow("TruncatedPhase", Array_I[0]);
@@ -11,17 +10,21 @@ int main() {
 	//cv::waitKey(0);
 
 
+	std::vector<cv::Mat> GrayImage;
+	std::vector<cv::Mat> PatternImage;
+	Mat TruncatedPhaseImage;
 
+	vector<string> gray_code = GrayCodeProjectCode(GrayBits);
 
-	//vector<string> gray_code = GrayCodeProjectCode(n);
-	//cout << gray_code[1] << endl;
-	//image = GrayCodeProjectImage(gray_code);
+	//! ∏Ò¿◊Õº
+	GrayImage = GrayCodeProjectImage(gray_code);
 
-	//vector<Mat> PatternImage = generatePattern();
+	//! π‚’§Õº
+	PatternImage = generatePattern();
 
-	image = getTruncatedPhase();
-	cv::imshow("PatternImage", image);
-	cv::waitKey(0);
+	//! Ωÿ∂œœ‡ŒªÕº
+	TruncatedPhaseImage = getTruncatedPhase();
+
 
 	return 0;
 }

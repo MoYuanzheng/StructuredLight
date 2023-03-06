@@ -15,10 +15,18 @@ using namespace cv;
 const int progectRows = 1140;
 const int projectCols = 912;
 const int phaseShiftSteps = 3;
+//! 格雷码位数
+const int GrayBits = 4;
 
 // !生成投影光栅条纹
 std::vector<cv::Mat> generatePattern();
 
+// !普通格雷码
+std::vector<std::string> GrayCode(int n);
+// !格雷码投影码
+std::vector<std::string> GrayCodeProjectCode(int n);
+// !投影格雷码图片
+std::vector<cv::Mat> GrayCodeProjectImage(std::vector<string> grayCode);
 
 // !CCD得到截断相位
 cv::Mat getTruncatedPhase();
@@ -29,11 +37,5 @@ Mat getContinuousPhase(Mat& image);
 // !高度映射
 Mat getHighlyMapped(Mat& image);
 
-// !格雷码相关
-// !普通格雷码
-std::vector<std::string> GrayCode(int n);
-// !格雷码投影码
-std::vector<std::string> GrayCodeProjectCode(int n);
-// !投影格雷码图片
-std::vector<cv::Mat> GrayCodeProjectImage(std::vector<string> grayCode);
+
 
