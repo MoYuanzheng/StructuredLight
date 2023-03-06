@@ -37,9 +37,9 @@ Mat generatePattern(int n) {
 	for (int i = 0; i < channels[0].rows; i++) {
 		for (int j = 0; j < channels[0].cols; j++) {
 			// ! In(x,y)=A(x,y)+B(x,y)cos[¦Õ(x,y)+2*¦Ð(n-1)/3+¦µ_0]
-			channels[0].at<uchar>(i, j) = I_A + I_B * cos((j * 20 % 360 + 0) * (2 * PI / 360));
-			channels[1].at<uchar>(i, j) = I_A + I_B * cos((j * 20 % 360 + 120) * (2 * PI / 360));
-			channels[2].at<uchar>(i, j) = I_A + I_B * cos((j * 20 % 360 + 240) * (2 * PI / 360));
+			channels[0].at<uchar>(i, j) = I_A + I_B * cos((j % 18 * 20 + 0) * (2 * PI / 360));
+			channels[1].at<uchar>(i, j) = I_A + I_B * cos((j % 18 * 20 + 120) * (2 * PI / 360));
+			channels[2].at<uchar>(i, j) = I_A + I_B * cos((j % 18 * 20 + 240) * (2 * PI / 360));
 		}
 	}
 	cv::Mat mergeChannels[3] = { channels[0], channels[1], channels[2] };
