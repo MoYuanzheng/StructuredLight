@@ -19,7 +19,7 @@ const int phaseShiftSteps = 3;
 const int GrayBits = 4;
 
 // !===投射阶段===
-// !生成投影光栅条纹
+// !光栅条纹投影
 std::vector<cv::Mat> generatePattern();
 
 // !普通格雷码

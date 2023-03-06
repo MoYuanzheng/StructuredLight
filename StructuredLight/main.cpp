@@ -17,6 +17,7 @@ int main() {
 	PatternImage = generatePattern();
 	for (int i = 0; i < PatternImage.size(); i++) {
 		cv::imshow("PatternImage_" + char(i), PatternImage[i]);
+		cv::waitKey(0);
 	}
 
 	//! ½Ø¶ÏÏàÎ»Í¼
