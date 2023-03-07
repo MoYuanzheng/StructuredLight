@@ -25,6 +25,13 @@ std::vector<std::string> GrayCode(int n) {
 	}
 }
 
+/*
+	产生格雷码
+	参数：
+		int n：格雷码位数
+	返回值：
+		std::vector<std::string> grayCode：string型的Vector 一系列格雷码
+*/
 std::vector<std::string> GrayCodeProjectCode(int n) {
 
 	std::vector<std::string> grayCode = { "01" };
@@ -47,9 +54,16 @@ std::vector<std::string> GrayCodeProjectCode(int n) {
 	return grayCode;
 }
 
+/*
+	产生格雷码投影图片
+	参数：
+		std::vector<std::string> grayCode：String型的Vector
+	返回值：
+		std::vector<cv::Mat> grayImages：Mat型的Vector 一系列格雷码图片
+*/
 std::vector<cv::Mat> GrayCodeProjectImage(std::vector<std::string> grayCode) {
 	std::vector<cv::Mat> grayImages;
-	cv::Mat grayImage = cv::Mat::zeros(progectRows, projectCols, 0);
+	cv::Mat grayImage = cv::Mat::zeros(progectRows, projectCols, CV_8UC1);
 	for (int k = 0; k < grayCode.size(); k++) {
 		int level = grayImage.cols / grayCode[k].length();
 
@@ -72,4 +86,81 @@ std::vector<cv::Mat> GrayCodeProjectImage(std::vector<std::string> grayCode) {
 	}
 
 	return grayImages;
+}
+
+/*
+	解析格雷码
+	参数：
+		std::vector<cv::Mat> grayImages：Mat型的Vector 由相机采集的一系列格雷码图片
+	返回值：
+		cv::Mat phaseLevelImages：Mat型的Vector 相位级次图
+*/
+
+/*
+	! 二值化拍摄的格雷码
+*/
+
+cv::Mat getPhaseLevelImage(std::vector<cv::Mat> grayImages, std::vector<cv::Mat> grayImagesMaxMin) {
+	cv::Mat phaseLevelImage = cv::Mat::zeros(CCDRows, CCDCols, CV_8UC1);
+
+	for (int i = 0; i < CCDRows; i++) {
+		for (int j = 0; j < CCDCols; j++) {
+			int tempCode[GrayBits]{};;
+			for (int k = 0; k < grayImages.size(); k++) {
+				// !二值化并计算 计算有问题！！！！
+				//int I_threshold =
+				//	(grayImages[k].at<uchar>(i, j) - grayImagesMaxMin[0].at<uchar>(i, j))
+				//	/ (grayImagesMaxMin[1].at<uchar>(i, j) - grayImagesMaxMin[0].at<uchar>(i, j));
+				//if (grayImages[k].at<uchar>(i, j) >= I_threshold) {
+				//	tempCode[k] = 1;
+				//}
+				//else {
+				//	tempCode[k] = 0;
+				//}
+
+				if (grayImages[k].at<uchar>(i, j) == 255) {
+					tempCode[k] = 1;
+				}
+				else {
+					tempCode[k] = 0;
+				}
+			}
+			//赋值
+			int num = Gray2Decimal(tempCode);
+			//cout << "i = " << i << " j = " << j << " num = " << num << " array =" << tempCode[0] << tempCode[1] << tempCode[2] << tempCode[3] << endl;
+
+			phaseLevelImage.at<uchar>(i, j) = num;
+		}
+
+
+	}
+	cv::imshow("phaseLevelImage", phaseLevelImage);
+	cv::waitKey(0);
+	return phaseLevelImage;
+}
+
+/*
+	格雷码转十进制
+	参数：
+		String Code：由格雷码组的字符串
+	返回值：
+		int num：格雷码转为十进制的值
+*/
+int Gray2Decimal(int arrayGrayCode[GrayBits]) {
+	int num = 0;
+	int binCode[GrayBits]{};
+	binCode[0] = arrayGrayCode[0];
+
+	for (int i = 1; i < GrayBits; i++) {
+		if (arrayGrayCode[i] + binCode[i - 1] == 2) { binCode[i] = 0; }
+		else { binCode[i] = arrayGrayCode[i] + binCode[i - 1]; }
+	}
+
+	for (int i = GrayBits - 1; i >= 0; i--) {
+		if (binCode[i] == 1) {
+			num += pow(2, GrayBits - i - 1);
+		}
+	}
+	//cout << num << endl;
+	return num;
 }

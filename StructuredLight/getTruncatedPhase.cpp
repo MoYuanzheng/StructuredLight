@@ -18,10 +18,11 @@ Mat getTruncatedPhase() {
 				sinSum += patternImage[k].at<uchar>(i, j) * sin(2 * (k + 1) * CV_PI / phaseShiftSteps);
 				cosSum += patternImage[k].at<uchar>(i, j) * cos(2 * (k + 1) * CV_PI / phaseShiftSteps);
 			}
-			double phase = -atan(sinSum / cosSum);
+			//atan2值域为(-PI,PI)
+			double phase = atan2(sinSum, cosSum);
 
 			I_phase.at<float>(i, j) = phase;
-			I_phase_255.at<uchar>(i, j) = (phase + CV_PI / 2) / CV_PI * 255;
+			//I_phase_255.at<uchar>(i, j) = (phase + CV_PI) / (2 * CV_PI) * 255;
 		}
 	}
 
@@ -30,7 +31,7 @@ Mat getTruncatedPhase() {
 	//cv::imshow("TruncatedPhase_255", I_phase_255);
 	//cv::waitKey(0);
 
-	return I_phase_255;
+	return I_phase;
 }
 /*
 * 三步相移法简捷公式

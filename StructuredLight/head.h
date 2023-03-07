@@ -18,6 +18,10 @@ const int phaseShiftSteps = 3;
 //! 格雷码位数
 const int GrayBits = 4;
 
+//! 相机 高 - 宽 ，相移步数
+const int CCDRows = 1140;
+const int CCDCols = 912;
+
 // !===投射阶段===
 // !光栅条纹投影
 std::vector<cv::Mat> generatePattern();
@@ -29,7 +33,13 @@ std::vector<std::string> GrayCodeProjectCode(int n);
 // !投影格雷码图片
 std::vector<cv::Mat> GrayCodeProjectImage(std::vector<string> grayCode);
 
+
+
 // !===捕捉计算阶段===
+// !
+cv::Mat getPhaseLevelImage(std::vector<cv::Mat> grayImages, std::vector<cv::Mat> grayImagesMaxMin);
+// !
+int Gray2Decimal(int grayCode[GrayBits]);
 // !CCD捕捉图像光栅图像并进行二值化处理
 // --------------------------
 // !计算截断相位

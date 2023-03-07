@@ -38,15 +38,16 @@ std::vector<cv::Mat> generatePattern() {
 		res.push_back(temp.clone());
 	}
 
-	for (int i = 0; i < progectRows; i++) {
-		for (int j = 0; j < projectCols; j++) {
-			for (int k = 0; k < phaseShiftSteps; k++) {
+	for (int k = 0; k < phaseShiftSteps; k++) {
+		for (int i = 0; i < progectRows; i++) {
+			for (int j = 0; j < projectCols; j++) {
+
 				// ! In(x,y)=A(x,y)+B(x,y)cos[¦Õ(x,y)+2*¦Ð(n-1)/3+¦µ_0]
 				res[k].at<uchar>(i, j) = I_A + I_B * cos(((j % 18 * 20 + k * 120)) * (2 * PI / 360));
+
 			}
 		}
 	}
-
 	//cv::imshow("TruncatedPhase", Array_I);
 	//cv::waitKey(0);
 	return res;
