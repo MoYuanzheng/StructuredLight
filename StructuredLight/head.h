@@ -13,14 +13,22 @@ using namespace cv;
 
 //! 投影仪 高 - 宽 ，相移步数
 const int progectRows = 1140;
-const int projectCols = 912;
-const int phaseShiftSteps = 3;
+const int projectCols = 1024;
+const int phaseShiftSteps = 18;
 //! 格雷码位数
-const int GrayBits = 4;
-
-//! 相机 高 - 宽 ，相移步数
+const int GrayBits = 6;
+const int phaseShiftPeriod = 16;
+//! 相机 高 - 宽 
 const int CCDRows = 1140;
-const int CCDCols = 912;
+const int CCDCols = 1024;
+
+//! 投影仪与CCD光学中心距离
+const int l_Op2Od = 20;
+//! 投影仪、CCD光学中心与反射平面的距离
+const int d_O2Plane = 100;
+
+//! 截断相位的偏移角
+const double theta_truncatedPhaseShifting = 9;
 
 // !===投射阶段===
 // !光栅条纹投影
@@ -50,7 +58,7 @@ cv::Mat getTruncatedPhase();
 // !计算各像素相位级次
 // -------------------
 // !解包裹 得到连续相位
-Mat getContinuousPhase(Mat image);
+Mat getContinuousPhase(Mat truncatedPhase, Mat phaseLevelImage);
 //-----------------------------------
 // !高度映射
 Mat getHighlyMapped(Mat image);

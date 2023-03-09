@@ -94,12 +94,9 @@ std::vector<cv::Mat> GrayCodeProjectImage(std::vector<std::string> grayCode) {
 		std::vector<cv::Mat> grayImages：Mat型的Vector 由相机采集的一系列格雷码图片
 	返回值：
 		cv::Mat phaseLevelImages：Mat型的Vector 相位级次图
+	注意点：
+		由于截断相位会偏移半个周期，故级次图应横向补充半个周期
 */
-
-/*
-	! 二值化拍摄的格雷码
-*/
-
 cv::Mat getPhaseLevelImage(std::vector<cv::Mat> grayImages, std::vector<cv::Mat> grayImagesMaxMin) {
 	cv::Mat phaseLevelImage = cv::Mat::zeros(CCDRows, CCDCols, CV_8UC1);
 
@@ -107,35 +104,23 @@ cv::Mat getPhaseLevelImage(std::vector<cv::Mat> grayImages, std::vector<cv::Mat>
 		for (int j = 0; j < CCDCols; j++) {
 			int tempCode[GrayBits]{};;
 			for (int k = 0; k < grayImages.size(); k++) {
-				// !二值化并计算 计算有问题！！！！
-				//int I_threshold =
-				//	(grayImages[k].at<uchar>(i, j) - grayImagesMaxMin[0].at<uchar>(i, j))
-				//	/ (grayImagesMaxMin[1].at<uchar>(i, j) - grayImagesMaxMin[0].at<uchar>(i, j));
-				//if (grayImages[k].at<uchar>(i, j) >= I_threshold) {
-				//	tempCode[k] = 1;
-				//}
-				//else {
-				//	tempCode[k] = 0;
-				//}
+				// !二值化并计算 
+				double I_threshold =
+					(grayImages[k].at<uchar>(i, j) - grayImagesMaxMin[0].at<uchar>(i, j))
+					/ (grayImagesMaxMin[1].at<uchar>(i, j) - grayImagesMaxMin[0].at<uchar>(i, j));
 
-				if (grayImages[k].at<uchar>(i, j) == 255) {
-					tempCode[k] = 1;
-				}
-				else {
-					tempCode[k] = 0;
-				}
+				if (I_threshold >= 0.5) { tempCode[k] = 1; }
+				else { tempCode[k] = 0; }
+
 			}
 			//赋值
 			int num = Gray2Decimal(tempCode);
-			//cout << "i = " << i << " j = " << j << " num = " << num << " array =" << tempCode[0] << tempCode[1] << tempCode[2] << tempCode[3] << endl;
 
 			phaseLevelImage.at<uchar>(i, j) = num;
 		}
-
-
 	}
-	cv::imshow("phaseLevelImage", phaseLevelImage);
-	cv::waitKey(0);
+	//cv::imshow("phaseLevelImage", phaseLevelImage);
+	//cv::waitKey(0);
 	return phaseLevelImage;
 }
 
@@ -151,11 +136,13 @@ int Gray2Decimal(int arrayGrayCode[GrayBits]) {
 	int binCode[GrayBits]{};
 	binCode[0] = arrayGrayCode[0];
 
+	//! 格雷码转二进制
 	for (int i = 1; i < GrayBits; i++) {
 		if (arrayGrayCode[i] + binCode[i - 1] == 2) { binCode[i] = 0; }
 		else { binCode[i] = arrayGrayCode[i] + binCode[i - 1]; }
 	}
 
+	//! 二进制转十进制
 	for (int i = GrayBits - 1; i >= 0; i--) {
 		if (binCode[i] == 1) {
 			num += pow(2, GrayBits - i - 1);
